@@ -233,7 +233,7 @@ class UTILS:
                 sound_file=folder+file_name
                 print ("load file ",sound_file)
                 # use kaiser_fast technique for faster extraction
-                X, sr = librosa.load( sound_file, sr=sr, duration=duration,res_type='kaiser_fast') 
+                X, sr = librosa.load(sound_file, sr=sr, duration=duration,res_type='kaiser_fast') 
                 dur = librosa.get_duration(y=X, sr=sr)
                 # pad audio file same duration
                 if (round(dur) < duration):
@@ -331,3 +331,49 @@ class UTILS:
         test_y = np.concatenate((A_unlabelledtest_labels,B_unlabelledtest_labels))
 
         return x_data, y_data, test_x, test_y
+
+    def select_label_class(self, file_name: str) -> int:
+        """
+        Función que machea los distintos labels
+
+        Args:
+            file_name (str): Path de la ruta del fichero
+
+        Returns:
+            int: 
+        """
+        if "artifact" in file_name:
+            return 0
+        elif "normal" in file_name:
+            return 2
+        elif "Aunlabelledtest" in file_name:
+            return -1
+        else:
+            return 1
+
+
+    def extract_features(self, file_name, max_pad_len: int = 174, cnn: bool = False):
+        """[summary]
+
+        Args:
+            file_name ([type]): [description]
+            max_pad_len (int, optional): [description]. Defaults to 174.
+            cnn (bool, optional): [description]. Defaults to False.
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            audio, sample_rate = librosa.load(file_name, res_type='kaiser_fast') 
+            mfccs = librosa.feature.mfcc(y=audio, sr=sample_rate, n_mfcc=40)
+            if cnn == True:
+                pad_width = max_pad_len - mfccs.shape[1]
+                mfccs = np.pad(mfccs, pad_width=((0, 0), (0, pad_width)), mode='constant')
+            else:
+                mfccs = np.mean(mfccs.T,axis=0)
+            
+        except:
+            print("Error encountered while parsing file: ", file_name)
+            return None 
+        
+        return mfccs
