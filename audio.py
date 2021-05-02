@@ -60,8 +60,8 @@ class PLOTS:
             plt.title('Waveform - {}'.format(audio_type))
         
         elif plot_type == 'spectogram':
-            # spect = np.abs(librosa.stft(y))
-            # img=librosa.display.specshow(librosa.amplitude_to_db(spect, ref=np.max),x_axis='time', y_axis='log')
+            spect = np.abs(librosa.stft(y))
+            librosa.display.specshow(librosa.amplitude_to_db(spect, ref=np.max),x_axis='time', y_axis='log')
             plt.title('Power spectrogram - {}'.format(audio_type))
             plt.plot()
         
@@ -249,7 +249,7 @@ class UTILS:
     #         data.append(feature)
     #     return data
 
-    def create_labels(self, classes: list=['artifact','anormal','normal']):
+    def create_labels(self, classes: list=['artifact','abnormal','normal']):
         """
         Creation of the dictionary for assigning to each category its corresponding label
 
@@ -358,7 +358,7 @@ class UTILS:
 
         Args:
             file_name ([type]): Ruta al audio del que se quiere extraer información.
-            max_pad_len (int, optional): . Defaults to 174.
+            max_pad_len (int, optional): . Defaults to 600.
             cnn (bool, optional): [description]. Defaults to False.
 
         Returns:
