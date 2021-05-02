@@ -164,90 +164,6 @@ class UTILS:
         """
         print("Instancia de la clase UTILS creada")
 
-    # def audio_norm(self, data):
-    #     """
-    #     Normalizador de audio.
-
-    #     Args:
-    #         data ([type]): Audio data.
-
-    #     Returns:
-    #         [type]: Audio normalizado.
-    #     """
-    #     max_data = np.max(data)
-    #     min_data = np.min(data)
-    #     data = (data-min_data)/(max_data-min_data+0.0001)
-    #     return data-0.5
-
-    # def load_file_data_without_change(self, folder,file_names, duration=3, sr=16000):
-    #     """
-    #     Get audio data without padding highest qualify audio
-
-    #     Args:
-    #         folder ([type]): Carpeta donde se encuentra el audio
-    #         file_names ([type]): Nombre del fichero.
-    #         duration (int, optional): Duracion. Defaults to 3.
-    #         sr (int, optional): Sample rate. Defaults to 16000.
-
-    #     Returns:
-    #         [type]: [description]
-    #     """
-    #     # input_length=sr*duration
-    #     # function to load files and extract features
-    #     # file_names = glob.glob(os.path.join(folder, '*.wav'))
-    #     data = []
-    #     for file_name in file_names:
-    #         try:
-    #             sound_file=folder+file_name
-    #             print ("load file ",sound_file)
-    #             # use kaiser_fast technique for faster extraction
-    #             X, sr = librosa.load( sound_file, res_type='kaiser_fast') 
-    #             # dur = librosa.get_duration(y=X, sr=sr)
-    #             # extract normalized mfcc feature from data
-    #             mfccs = np.mean(librosa.feature.mfcc(y=X, sr=sr, n_mfcc=40).T,axis=0) 
-    #         except:
-    #             print("Error encountered while parsing file: ", file_name)
-    #         feature = np.array(mfccs).reshape([-1,1])
-    #         data.append(feature)
-    #     return data
-
-    # def load_file_data(self, folder,file_names, duration=12, sr=16000):
-    #     """
-    #     Get audio data with a fix padding may also chop off some file
-
-    #     Args:
-    #         folder ([type]): Carpeta donde se encuentra el audio
-    #         file_names ([type]): Nombre del fichero.
-    #         duration (int, optional): Duracion. Defaults to 12.
-    #         sr (int, optional): Sample rate. Defaults to 16000.
-
-    #     Returns:
-    #         [type]: [description]
-    #     """
-    #     # input_length=sr*duration
-    #     # function to load files and extract features
-    #     # file_names = glob.glob(os.path.join(folder, '*.wav'))
-    #     data = []
-    #     for file_name in file_names:
-    #         try:
-    #             sound_file=folder+file_name
-    #             print ("load file ",sound_file)
-    #             # use kaiser_fast technique for faster extraction
-    #             X, sr = librosa.load(sound_file, sr=sr, duration=duration,res_type='kaiser_fast') 
-    #             dur = librosa.get_duration(y=X, sr=sr)
-    #             # pad audio file same duration
-    #             if (round(dur) < duration):
-    #                 print ("fixing audio lenght :", file_name)
-    #                 # y = librosa.util.fix_length(X, input_length)
-    #             #normalized raw audio 
-    #             # y = audio_norm(y)            
-    #             # extract normalized mfcc feature from data
-    #             mfccs = np.mean(librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40).T,axis=0)
-    #         except:
-    #             print("Error encountered while parsing file: ", file_name)
-    #         feature = np.array(mfccs).reshape([-1,1])
-    #         data.append(feature)
-    #     return data
 
     def create_labels(self, classes: list=['artifact','abnormal','normal']):
         """
@@ -266,71 +182,6 @@ class UTILS:
         print('The other way around would be {}'.format(int_to_label))
         return label_to_int, int_to_label,classes
 
-    # def sets_creation(self, input_dir: str='archive/', max_sound_duration: int=12):
-    #     """
-    #     Función que carga todos los audios y los categoriza como normal, anormal, ruido y test.
-
-    #     Args:
-    #         input_dir (str, optional): Path al directorio de los audios. Defaults to 'archive/'.
-    #         max_sound_duration (int, optional): Maxima duración del audio. Defaults to 12.
-
-    #     Returns:
-    #         [list]: Listas con los sonidos y las labels de entrenamiento y test.
-    #     """
-        
-    #     A_folder=input_dir+'/set_a/'
-    #     # set-a
-    #     A_artifact_files = fnmatch.filter(os.listdir(input_dir+'/set_a'), 'artifact*.wav')
-    #     A_artifact_sounds = self.load_file_data(folder=A_folder,file_names=A_artifact_files, duration=max_sound_duration)
-    #     A_artifact_labels = [0 for items in A_artifact_files]
-
-    #     A_normal_files = fnmatch.filter(os.listdir(input_dir+'/set_a'), 'normal*.wav')
-    #     A_normal_sounds = self.load_file_data(folder=A_folder,file_names=A_normal_files, duration=max_sound_duration)
-    #     A_normal_labels = [2 for items in A_normal_sounds]
-
-    #     A_extrahls_files = fnmatch.filter(os.listdir(input_dir+'/set_a'), 'extrahls*.wav')
-    #     A_extrahls_sounds = self.load_file_data(folder=A_folder,file_names=A_extrahls_files, duration=max_sound_duration)
-    #     A_extrahls_labels = [1 for items in A_extrahls_sounds]
-
-    #     A_murmur_files = fnmatch.filter(os.listdir(input_dir+'/set_a'), 'murmur*.wav')
-    #     A_murmur_sounds = self.load_file_data(folder=A_folder,file_names=A_murmur_files, duration=max_sound_duration)
-    #     A_murmur_labels = [1 for items in A_murmur_files]
-
-    #     # test files
-    #     A_unlabelledtest_files = fnmatch.filter(os.listdir(input_dir+'/set_a'), 'Aunlabelledtest*.wav')
-    #     A_unlabelledtest_sounds = self.load_file_data(folder=A_folder,file_names=A_unlabelledtest_files, duration=max_sound_duration)
-    #     A_unlabelledtest_labels = [-1 for items in A_unlabelledtest_sounds]
-
-    #     # load dataset-b, keep them separate for testing purpose 
-    #     B_folder=input_dir+'/set_b/'
-    #     # set-b
-    #     B_normal_files = fnmatch.filter(os.listdir(input_dir+'/set_b'), 'normal*.wav')  # include noisy files
-    #     B_normal_sounds = self.load_file_data(folder=B_folder,file_names=B_normal_files, duration=max_sound_duration)
-    #     B_normal_labels = [2 for items in B_normal_sounds]
-
-    #     B_murmur_files = fnmatch.filter(os.listdir(input_dir+'/set_b'), 'murmur*.wav')  # include noisy files
-    #     B_murmur_sounds = self.load_file_data(folder=B_folder,file_names=B_murmur_files, duration=max_sound_duration)
-    #     B_murmur_labels = [1 for items in B_murmur_files]
-
-    #     B_extrastole_files = fnmatch.filter(os.listdir(input_dir+'/set_b'), 'extrastole*.wav')
-    #     B_extrastole_sounds = self.load_file_data(folder=B_folder,file_names=B_extrastole_files, duration=max_sound_duration)
-    #     B_extrastole_labels = [1 for items in B_extrastole_files]
-
-    #     #test files
-    #     B_unlabelledtest_files = fnmatch.filter(os.listdir(input_dir+'/set_b'), 'Bunlabelledtest*.wav')
-    #     B_unlabelledtest_sounds = self.load_file_data(folder=B_folder,file_names=B_unlabelledtest_files, duration=max_sound_duration)
-    #     B_unlabelledtest_labels = [-1 for items in B_unlabelledtest_sounds]
-
-    #     x_data = np.concatenate((A_artifact_sounds, A_normal_sounds,A_extrahls_sounds,A_murmur_sounds, 
-    #                             B_normal_sounds,B_murmur_sounds,B_extrastole_sounds))
-
-    #     y_data = np.concatenate((A_artifact_labels, A_normal_labels,A_extrahls_labels,A_murmur_labels,
-    #                             B_normal_labels,B_murmur_labels,B_extrastole_labels))
-
-    #     test_x = np.concatenate((A_unlabelledtest_sounds,B_unlabelledtest_sounds))
-    #     test_y = np.concatenate((A_unlabelledtest_labels,B_unlabelledtest_labels))
-
-    #     return x_data, y_data, test_x, test_y
 
     def select_label_class(self, file_name: str) -> int:
         """
@@ -361,8 +212,14 @@ class UTILS:
             max_pad_len (int, optional): . Defaults to 600.
             cnn (bool, optional): [description]. Defaults to False.
 
+        Args:
+            file_name (str): Ruta al audio del que se quiere extraer información.
+            max_pad_len (int, optional): Padding. Defaults to 586.
+            cnn (bool, optional): Extracción de features para una CNN. Defaults to False.
+            duration (int, optional): Máxima duración de los audios. Defaults to 12.
+
         Returns:
-            [type]: [description]
+            [type]: mfccs.
         """
         try:
             if cnn == True:
